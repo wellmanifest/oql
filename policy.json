@@ -1,0 +1,169 @@
+{
+  "schema": "wellmanifest.oql/policy/v1",
+  "id": "wellmanifest.oql",
+  "version": "0.1.0",
+  "status": "draft",
+  "home": "wellmanifest",
+  "shape": "domain_pack",
+  "runtime_owner": "adopting-project",
+  "effect_model": "read-only-conformance",
+  "authority": "none",
+  "rules": [
+    {
+      "id": "OQL-001",
+      "topic": "dialect",
+      "requirement": "Declare dialect, grammar version, supported subset, compiler revision and transport contract separately. OQL source, hardware JSON commands, DOQL, SQL and TestQL are not interchangeable. Reject unsupported declarations before effects.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-002",
+      "topic": "authority",
+      "requirement": "For each configuration namespace declare exactly one writable authority, owner and mutation API. Git seeds, store rows, filesystem replicas, firmware NVS and UI projections have explicit roles; copying does not transfer authority.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-003",
+      "topic": "composition",
+      "requirement": "Resolve a bounded acyclic include graph with deterministic declared precedence, source digests and authenticated context. Reject duplicate declarations within a layer; cross-layer overrides require an explicit allowlist and provenance. Unknown target selectors must fail closed.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-004",
+      "topic": "compilation",
+      "requirement": "Compile the complete supported grammar, including comments, escaping, types, units, ranges and cross-field constraints. Regex header recognition alone is not syntax validation. Unknown fields, duplicate JSON keys, non-finite numbers and unsupported versions are rejected.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-005",
+      "topic": "catalog",
+      "requirement": "Every writable setting has a type, unit, owning source, consumer, apply mode, write operation and verification method. Distinguish supported-writable, read-only, compile-time-only and documentary settings. A SET declaration alone proves no support.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-006",
+      "topic": "revision",
+      "requirement": "Keep raw source-byte SHA256, effective configuration digest and compiler identity distinct. Bind execution to the complete source graph and context. Compare expected revisions atomically at the authority; never silently perform last-writer-wins updates or omit conflict checks on alternate write routes.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-007",
+      "topic": "auth",
+      "requirement": "Resolve principal and role from a trusted authenticated boundary. Device execution revalidates capability, audience, resource and expiry. Payload/URL roles, source comments, natural-language plans and this conformance result grant no authority.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-008",
+      "topic": "secrets",
+      "requirement": "Store only references to provisioned secrets in OQL, manifests and public evidence. Exclude secret values from logs, projections and hashes published as guessing oracles. Secret resolution is scoped, audited and outside compilation.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-009",
+      "topic": "addressing",
+      "requirement": "Processes use stable logical identities; transport resolution follows authorization. Discovery is an observation, not configuration authority. Confirm device identity and freshness; reject ambiguous, mismatched and unknown destinations.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-010",
+      "topic": "effects",
+      "requirement": "Classify query, compile, simulate, configure, actuate, deploy and firmware-update separately. Dry-run performs no device writes. Read or UI success cannot imply actuation. Physical command retries require reconciliation, never automatic mutation failover.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-011",
+      "topic": "leases",
+      "requirement": "Serialize conflicting physical effects with device-validated bounded leases/fencing. Loss of lease triggers documented local safe behavior. A STOP targets the device/channel captured at START, even if configuration changes meanwhile.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-012",
+      "topic": "idempotency",
+      "requirement": "Bind a mutation identifier to target, payload digest and expected revision. Define deduplication retention and restart behavior; reject same key with different payload. If persistent deduplication is unavailable, declare reconcile-only/no-blind-retry. A header is not proof of deduplication.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-013",
+      "topic": "state",
+      "requirement": "Expose desired, validated, staged, applying, trial, confirmed, rolled_back, failed, partial and outcome_unknown distinctly. HTTP acceptance, file save, source commit and a healthy unrelated endpoint do not establish applied configuration.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-014",
+      "topic": "readback",
+      "requirement": "Confirmation binds target identity, requested and observed configuration digests, firmware identity, observer and timestamp. Verify both revision and effective values/capabilities. Failed or ambiguous verification must not be labelled confirmed.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-015",
+      "topic": "transactions",
+      "requirement": "Journal config-store and device effects as separate steps with preconditions, recovery and compensation. No cross-device atomicity claim without a supporting protocol. Failed compensation remains partial/unknown and blocks dependent actions.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-016",
+      "topic": "network",
+      "requirement": "Network/pin changes use staged activation, bounded reconnection, identity-checked readback and a device-local rollback deadline. Persist activation receipts only after confirmation. DNS/LAN readiness alone is not target proof.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-017",
+      "topic": "firmware",
+      "requirement": "Bind each update to source revision, exact image digest, board/variant, compiler/build inputs, provisioning contract, supported OQL/API schemas and current-image precondition. Verify provenance through the deployment trust policy; a supplied SHA256 proves integrity, not publisher authenticity.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-018",
+      "topic": "firmware-activation",
+      "requirement": "Before update verify safe idle outputs and exclusive maintenance. Use a recoverable inactive image or an explicit alternative recovery method. Preserve identities, keys and calibration; confirm running image plus hardware readiness after boot, otherwise roll back. Never flash a compile-test image as a provisioned production release.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-019",
+      "topic": "fleet",
+      "requirement": "An immutable fleet plan binds the exact target set, per-device desired revisions, compatibility matrix, dependency waves and failure policy. Preserve device-specific overlays, calibration and secrets. Stop progression on failure; record per-device partial success and recovery. A global boolean cannot erase partial rollout.",
+      "verification": "semantic"
+    },
+    {
+      "id": "OQL-020",
+      "topic": "delivery",
+      "requirement": "Keep built, tested, committed, published, installed, running and verified release states separate. Pin image/bundle digests and source graph; mutable tags and repository fast-forward alone are insufficient deployed-version evidence.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-021",
+      "topic": "telemetry",
+      "requirement": "Return channel identity, physical/virtual origin, presence, validity, freshness, saturation, raw unit and calibration revision. Missing configured hardware must not become a valid virtual zero. Support arbitrary declared channels independently of logical NC/SC/WC labels.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-022",
+      "topic": "polling",
+      "requirement": "Declare deadlines, freshness limits, single-flight/coalescing and bounded load. Query caching preserves timestamp/origin; expired data is not fresh success. Give safety STOP/control priority over diagnostic polling.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-023",
+      "topic": "errors",
+      "requirement": "Preserve correlation across process, adapter and device; report source, stage, target, code, retry disposition and reconciliation action. Generic hardware-unavailable errors must not prescribe repairs for an unrelated transport.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-024",
+      "topic": "tests",
+      "requirement": "Pin simulator capability/schema versions and declare deviations from real hardware. Require negative auth, conflict, duplicate/replay, lost-response, partial failure, reboot rollback and missing-channel tests for applicable effects. Simulation success does not establish physical conformance.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-025",
+      "topic": "migration",
+      "requirement": "Version the contract and provide explicit migrations for renamed keys, units, layer authority and capability changes. Seed deployment must not overwrite newer active device configuration; downgrade compatibility and rollback state are explicit.",
+      "verification": "review"
+    },
+    {
+      "id": "OQL-026",
+      "topic": "adoption",
+      "requirement": "Adoption records pin this standard and map rules to owned implementations, tests and exceptions. Separate implemented, partial, absent, unobserved and not_applicable. Publish scope/revisions/coverage; a source-only audit cannot attest production enforcement.",
+      "verification": "review"
+    }
+  ]
+}

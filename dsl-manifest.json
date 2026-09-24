@@ -1,0 +1,152 @@
+{
+  "$schema": "https://wellmanifest.dev/schemas/dsl-manifest/v1",
+  "schema": "wellmanifest.dsl/manifest/v1",
+  "id": "wellmanifest.oql",
+  "name": "Wellmanifest OQL Configuration and Execution Lifecycle",
+  "version": "0.1.0",
+  "status": "experimental",
+  "purpose": "Standardize OQL authority, contexts, firmware updates, deployment and fleet state with read-only conformance.",
+  "domain": "oql-lifecycle",
+  "owners": [
+    {
+      "kind": "organization",
+      "id": "wellmanifest",
+      "responsibilities": [
+        "semantics",
+        "validation",
+        "compatibility"
+      ]
+    }
+  ],
+  "source": {
+    "repository": "https://github.com/wellmanifest/oql",
+    "path": "policy.json",
+    "canonical": "json-ast",
+    "mediaType": "application/json",
+    "selectors": [
+      "version",
+      "rules"
+    ]
+  },
+  "ownedPaths": [
+    "policy.json",
+    "schemas/**",
+    "operations/**",
+    "tests/**",
+    "examples/**",
+    "docs/**",
+    "README.md",
+    "AGENTS.md",
+    "VERSION",
+    "dsl-manifest.json"
+  ],
+  "artifacts": [
+    {
+      "path": "policy.json",
+      "role": "normative-source",
+      "digest": "sha256:463c67013eb67707a3c0a4525cc25b314421db0a056d699673d57232b26c650f"
+    },
+    {
+      "path": "schemas/rollout-review.schema.json",
+      "role": "schema",
+      "digest": "sha256:99b1c1da08009783374de37802cfe4d106d9e4bcc404b71aa5377a97bb6af59b"
+    },
+    {
+      "path": "operations/conformance.py",
+      "role": "parser-contract",
+      "digest": "sha256:48eb5b32cd27ef188ccdbf5710e350ce7d552f0f4df1b838a0825acf76460bb6"
+    },
+    {
+      "path": "docs/information/oql-lifecycle-standard.md",
+      "role": "documentation",
+      "digest": "sha256:fb25b8ff3908d9b6521903572846420c310b119284529007b178d7b681a901b0"
+    },
+    {
+      "path": "README.md",
+      "role": "documentation",
+      "digest": "sha256:c5c30371b160c3cc3cef80801d973eafadda036c3e9c527b5de166f9eb59aad3"
+    }
+  ],
+  "namespaces": [
+    {
+      "prefix": "oql",
+      "uri": "https://wellmanifest.dev/oql/v1"
+    }
+  ],
+  "projections": [],
+  "lifecycle": {
+    "compatibility": "semver",
+    "stability": "experimental",
+    "breaking": "major",
+    "additive": "minor",
+    "fix": "patch"
+  },
+  "semantics": {
+    "effectModel": "declarative-policy",
+    "unknownPolicy": "reject",
+    "authoritySchema": null
+  },
+  "llm": {
+    "mode": "none",
+    "requestSchemas": [],
+    "responseSchemas": [],
+    "naturalLanguage": "forbidden",
+    "sourceSchema": null,
+    "decisionProtocol": "none",
+    "modelAuthority": "none",
+    "strict": true
+  },
+  "documentation": {
+    "vocabularyKind": "documents",
+    "commandRoot": "docs",
+    "errorRoot": "docs/ERROR",
+    "criticalRoot": "docs/CRITICAL",
+    "commands": [],
+    "errorCodes": [],
+    "criticalCodes": []
+  },
+  "findingPolicy": {
+    "schema": "wellmanifest.dsl/findings/v1",
+    "requiredProducers": [
+      "wellmanifest.oql.conformance"
+    ],
+    "securityProducers": [
+      "wellmanifest.oql.conformance"
+    ],
+    "blockingSeverities": [
+      "critical"
+    ],
+    "requireEvaluable": true,
+    "blockUnresolvedSecurity": true
+  },
+  "publicationPolicy": {
+    "declaredTier": "review",
+    "deterministic": true,
+    "independentReview": true,
+    "externalAuthority": false,
+    "runtimeIsolation": false
+  },
+  "conformance": {
+    "levels": [
+      "manifest",
+      "contract"
+    ],
+    "commands": [
+      "python3 -m unittest discover -s tests -v",
+      "python3 operations/conformance.py examples/network-rollout.json",
+      "python3 operations/conformance.py examples/firmware-rollout.json"
+    ],
+    "validExamples": [
+      "examples/network-rollout.json",
+      "examples/firmware-rollout.json"
+    ],
+    "invalidExamples": []
+  },
+  "mappings": [
+    {
+      "standard": "wellmanifest.dsl",
+      "version": "0.1.0",
+      "relation": "compatible-with"
+    }
+  ]
+}
