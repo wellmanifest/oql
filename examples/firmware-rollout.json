@@ -1,0 +1,118 @@
+{
+  "schema": "wellmanifest.oql/rollout-review/v1",
+  "id": "fixture-firmware-rollout",
+  "repository": "example/fleet",
+  "standard_version": "0.1.0",
+  "dialect": {
+    "id": "example/oql-config",
+    "version": "6",
+    "compiler_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "unknown_declarations": "reject"
+  },
+  "sources": [
+    {
+      "id": "system",
+      "path": "system.oql",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "owner": "example/control-plane",
+      "role": "authority",
+      "authority_source": null
+    }
+  ],
+  "precedence": [
+    "system"
+  ],
+  "fields": [],
+  "targets": [
+    {
+      "id": "node-a",
+      "identity": "device:fixture-a",
+      "environment": "twin",
+      "current_config": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "desired_config": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "current_firmware": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "compatible": true
+    },
+    {
+      "id": "node-b",
+      "identity": "device:fixture-b",
+      "environment": "twin",
+      "current_config": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "desired_config": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "current_firmware": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "compatible": true
+    }
+  ],
+  "operations": [
+    {
+      "id": "configure-node-a",
+      "target": "node-a",
+      "effect": "firmware-update",
+      "source": "system",
+      "expected_config": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected_firmware": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "desired_config": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "payload_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "capability": "hardware.node.firmware.update",
+      "idempotency": "reconcile-only",
+      "deduplication_window_s": 0,
+      "apply": "firmware",
+      "readback": "identity, revision and effective network",
+      "rollback": "120s device-local rollback",
+      "firmware": {
+        "source_revision": "1111111111111111111111111111111111111111",
+        "image_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "board": "example-board",
+        "variant": "sensor-node",
+        "build_manifest_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "provisioning_ref": "provisioning://fixture-profile",
+        "provenance_verifier": "policy://operator-trusted-build",
+        "recovery": "inactive slot and boot rollback",
+        "safe_idle_required": true,
+        "post_boot_verification": "image identity, configuration and hardware readiness"
+      }
+    },
+    {
+      "id": "configure-node-b",
+      "target": "node-b",
+      "effect": "firmware-update",
+      "source": "system",
+      "expected_config": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected_firmware": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "desired_config": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "payload_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "capability": "hardware.node.firmware.update",
+      "idempotency": "reconcile-only",
+      "deduplication_window_s": 0,
+      "apply": "firmware",
+      "readback": "identity, revision and effective network",
+      "rollback": "120s device-local rollback",
+      "firmware": {
+        "source_revision": "1111111111111111111111111111111111111111",
+        "image_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "board": "example-board",
+        "variant": "sensor-node",
+        "build_manifest_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "provisioning_ref": "provisioning://fixture-profile",
+        "provenance_verifier": "policy://operator-trusted-build",
+        "recovery": "inactive slot and boot rollback",
+        "safe_idle_required": true,
+        "post_boot_verification": "image identity, configuration and hardware readiness"
+      }
+    }
+  ],
+  "rollout": {
+    "waves": [
+      [
+        "node-a"
+      ],
+      [
+        "node-b"
+      ]
+    ],
+    "failure_policy": "stop-and-reconcile",
+    "atomicity": "per-target"
+  },
+  "receipts": [],
+  "state": "planned"
+}

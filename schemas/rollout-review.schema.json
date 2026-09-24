@@ -1,0 +1,547 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellmanifest.dev/oql/rollout-review/v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "wellmanifest.oql/rollout-review/v1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1
+    },
+    "standard_version": {
+      "const": "0.1.0"
+    },
+    "dialect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compiler_revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "unknown_declarations": {
+          "const": "reject"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "compiler_revision",
+        "unknown_declarations"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "enum": [
+              "authority",
+              "seed",
+              "projection",
+              "observation"
+            ]
+          },
+          "authority_source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "path",
+          "sha256",
+          "owner",
+          "role",
+          "authority_source"
+        ]
+      },
+      "minItems": 1
+    },
+    "precedence": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "enum": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "secret-ref"
+            ]
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1
+          },
+          "support": {
+            "enum": [
+              "writable",
+              "read-only",
+              "compile-time",
+              "documentary"
+            ]
+          },
+          "apply": {
+            "enum": [
+              "next-read",
+              "next-operation",
+              "hot",
+              "restart-trial",
+              "firmware",
+              "none"
+            ]
+          },
+          "consumer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "write_operation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "verification": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rollback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "source",
+          "type",
+          "unit",
+          "support",
+          "apply",
+          "consumer",
+          "write_operation",
+          "verification",
+          "rollback"
+        ]
+      },
+      "minItems": 0
+    },
+    "targets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "identity": {
+            "type": "string",
+            "minLength": 1
+          },
+          "environment": {
+            "enum": [
+              "real",
+              "twin"
+            ]
+          },
+          "current_config": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "desired_config": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "current_firmware": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "compatible": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "identity",
+          "environment",
+          "current_config",
+          "desired_config",
+          "current_firmware",
+          "compatible"
+        ]
+      },
+      "minItems": 1
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "effect": {
+            "enum": [
+              "query",
+              "configure",
+              "actuate",
+              "firmware-update"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_config": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "expected_firmware": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "desired_config": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "payload_digest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "capability": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "idempotency": {
+            "enum": [
+              "deduplicate",
+              "reconcile-only",
+              "not-applicable"
+            ]
+          },
+          "deduplication_window_s": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "apply": {
+            "enum": [
+              "next-read",
+              "next-operation",
+              "hot",
+              "restart-trial",
+              "firmware",
+              "none"
+            ]
+          },
+          "readback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rollback": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "firmware": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "source_revision": {
+                    "type": "string",
+                    "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+                  },
+                  "image_digest": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "board": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "variant": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "build_manifest_digest": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "provisioning_ref": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "provenance_verifier": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "recovery": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "safe_idle_required": {
+                    "const": true
+                  },
+                  "post_boot_verification": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "source_revision",
+                  "image_digest",
+                  "board",
+                  "variant",
+                  "build_manifest_digest",
+                  "provisioning_ref",
+                  "provenance_verifier",
+                  "recovery",
+                  "safe_idle_required",
+                  "post_boot_verification"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "target",
+          "effect",
+          "source",
+          "expected_config",
+          "expected_firmware",
+          "desired_config",
+          "payload_digest",
+          "capability",
+          "idempotency",
+          "deduplication_window_s",
+          "apply",
+          "readback",
+          "rollback",
+          "firmware"
+        ]
+      },
+      "minItems": 1
+    },
+    "rollout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "waves": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "minItems": 1
+        },
+        "failure_policy": {
+          "enum": [
+            "stop-and-reconcile",
+            "rollback-confirmed-targets"
+          ]
+        },
+        "atomicity": {
+          "const": "per-target"
+        }
+      },
+      "required": [
+        "waves",
+        "failure_policy",
+        "atomicity"
+      ]
+    },
+    "receipts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "operation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target_identity": {
+            "type": "string",
+            "minLength": 1
+          },
+          "state": {
+            "enum": [
+              "desired",
+              "validated",
+              "staged",
+              "applying",
+              "trial",
+              "confirmed",
+              "rolled_back",
+              "failed",
+              "outcome_unknown"
+            ]
+          },
+          "observed_config": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "observed_firmware": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "verification": {
+            "enum": [
+              "not-run",
+              "pass",
+              "fail",
+              "unknown"
+            ]
+          },
+          "evidence_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "observer": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observed_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "operation",
+          "target_identity",
+          "state",
+          "observed_config",
+          "observed_firmware",
+          "verification",
+          "evidence_ref",
+          "observer",
+          "observed_at"
+        ]
+      },
+      "minItems": 0
+    },
+    "state": {
+      "enum": [
+        "planned",
+        "partial",
+        "confirmed",
+        "failed",
+        "outcome_unknown",
+        "rolled_back"
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "id",
+    "repository",
+    "standard_version",
+    "dialect",
+    "sources",
+    "precedence",
+    "fields",
+    "targets",
+    "operations",
+    "rollout",
+    "receipts",
+    "state"
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "schema": "wellmanifest.oql/rollout-review/v1",
+  "id": "fixture-network-rollout",
+  "repository": "example/fleet",
+  "standard_version": "0.1.0",
+  "dialect": {
+    "id": "example/oql-config",
+    "version": "6",
+    "compiler_revision": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "unknown_declarations": "reject"
+  },
+  "sources": [
+    {
+      "id": "system",
+      "path": "system.oql",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "owner": "example/control-plane",
+      "role": "authority",
+      "authority_source": null
+    }
+  ],
+  "precedence": [
+    "system"
+  ],
+  "fields": [
+    {
+      "key": "node.network.mode",
+      "source": "system",
+      "type": "string",
+      "unit": "none",
+      "support": "writable",
+      "apply": "restart-trial",
+      "consumer": "example/node-runtime",
+      "write_operation": "c2004://hardware-node/node-a/network/command/configure",
+      "verification": "revision and effective network readback",
+      "rollback": "device-local 120s trial"
+    }
+  ],
+  "targets": [
+    {
+      "id": "node-a",
+      "identity": "device:fixture-a",
+      "environment": "twin",
+      "current_config": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "desired_config": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "current_firmware": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "compatible": true
+    },
+    {
+      "id": "node-b",
+      "identity": "device:fixture-b",
+      "environment": "twin",
+      "current_config": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "desired_config": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "current_firmware": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "compatible": true
+    }
+  ],
+  "operations": [
+    {
+      "id": "configure-node-a",
+      "target": "node-a",
+      "effect": "configure",
+      "source": "system",
+      "expected_config": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected_firmware": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "desired_config": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "payload_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "capability": "hardware.node.network.configure",
+      "idempotency": "reconcile-only",
+      "deduplication_window_s": 0,
+      "apply": "restart-trial",
+      "readback": "identity, revision and effective network",
+      "rollback": "120s device-local rollback",
+      "firmware": null
+    },
+    {
+      "id": "configure-node-b",
+      "target": "node-b",
+      "effect": "configure",
+      "source": "system",
+      "expected_config": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected_firmware": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "desired_config": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "payload_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "capability": "hardware.node.network.configure",
+      "idempotency": "reconcile-only",
+      "deduplication_window_s": 0,
+      "apply": "restart-trial",
+      "readback": "identity, revision and effective network",
+      "rollback": "120s device-local rollback",
+      "firmware": null
+    }
+  ],
+  "rollout": {
+    "waves": [
+      [
+        "node-a"
+      ],
+      [
+        "node-b"
+      ]
+    ],
+    "failure_policy": "stop-and-reconcile",
+    "atomicity": "per-target"
+  },
+  "receipts": [],
+  "state": "planned"
+}
