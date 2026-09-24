@@ -1,0 +1,12 @@
+/.worktrees/
+/.subactor/leases/
+/.subactor/sessions/
+/.subactor/recovery/
+/.subactor/receipts/
+/.subactor/cache/
+/.subactor/snapshots/
+__pycache__/
+.pytest_cache/
+.venv/
+.planfile/**/*.fast.json
+.planfile/*.lock
